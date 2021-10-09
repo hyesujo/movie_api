@@ -5,9 +5,10 @@ import 'package:http/http.dart' as http;
 
 class MovieData {
   Future<List<Movie>> loadMovieData() async {
+    String apiKey = '';
     List<Movie> data = [];
-    var resp = await http.get(Uri.parse(
-        'https://api.themoviedb.org/3/movie/now_playing?api_key=b2dff17920f85dd3f13b0568f4a96530'));
+    var resp = await http.get(
+        Uri.parse('https://api.themoviedb.org/3/movie/now_playing?${apiKey}'));
     if (resp.statusCode == 200) {
       Map<String, dynamic> body = json.decode(resp.body);
       if (body['results'] != null) {

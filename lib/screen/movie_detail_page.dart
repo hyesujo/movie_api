@@ -27,7 +27,6 @@ class MovieDetailPage extends StatelessWidget {
     var screenHeight = MediaQuery.of(context).size.height;
     return Stack(
       overflow: Overflow.visible,
-      alignment: Alignment.center,
       fit: StackFit.loose,
       children: [
         Container(

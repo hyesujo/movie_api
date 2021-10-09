@@ -56,9 +56,12 @@ class MovieInfoPage extends StatelessWidget {
                   return _buildMainPost(context, movieDatas[index]);
                 }),
           ),
-          _buildMovieInfo(title: '개봉 예정', movieDatas: movieDatas),
-          _buildMovieInfo(title: '인기', movieDatas: movieDatas),
-          _buildMovieInfo(title: '높은 평점', movieDatas: movieDatas),
+          _buildMovieInfo(
+              title: '개봉 예정', movieDatas: movieDatas, context: context),
+          _buildMovieInfo(
+              title: '인기', movieDatas: movieDatas, context: context),
+          _buildMovieInfo(
+              title: '높은 평점', movieDatas: movieDatas, context: context),
         ],
       ),
     );
@@ -67,10 +70,13 @@ class MovieInfoPage extends StatelessWidget {
   Widget _buildMainPost(BuildContext context, Movie movieData) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(context).push(
+          MaterialPageRoute(
             builder: (context) => MovieDetailPage(
-                  movie: movieData,
-                )));
+              movie: movieData,
+            ),
+          ),
+        );
       },
       child: Column(
         children: [
@@ -110,7 +116,9 @@ class MovieInfoPage extends StatelessWidget {
   }
 
   Widget _buildMovieInfo(
-      {required List<Movie> movieDatas, required String title}) {
+      {required List<Movie> movieDatas,
+      required String title,
+      required BuildContext context}) {
     return Container(
       padding: const EdgeInsets.only(top: 40),
       child: Column(
@@ -128,7 +136,10 @@ class MovieInfoPage extends StatelessWidget {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: 3,
                 itemBuilder: (BuildContext context, int index) {
-                  return movieItem(movieDatas[index]);
+                  return movieItem(
+                    context,
+                    movieDatas[index],
+                  );
                 }),
           )
         ],
@@ -136,62 +147,74 @@ class MovieInfoPage extends StatelessWidget {
     );
   }
 
-  Widget movieItem(Movie movie) {
-    return Container(
-      padding: EdgeInsets.only(bottom: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Row(
-            children: [
-              SizedBox(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Container(
-                    height: 60,
-                    child: Image.network(movie.postUrl),
-                  ),
-                ),
-              ),
-              SizedBox(width: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    movie.title,
-                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 5),
-                  RatingBar.builder(
-                      initialRating: 4,
-                      direction: Axis.horizontal,
-                      ignoreGestures: true,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemBuilder: (context, _) =>
-                          const Icon(Icons.star, color: Colors.amber),
-                      itemSize: 9,
-                      onRatingUpdate: (_) {}),
-                  Container(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: const Text(
-                      'Action, Drama',
-                      style: TextStyle(
-                          color: Color.fromRGBO(0x9a, 0x9a, 0x9a, 1),
-                          fontSize: 9),
+  Widget movieItem(BuildContext context, Movie movie) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => MovieDetailPage(
+              movie: movie,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.only(bottom: 5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Row(
+              children: [
+                SizedBox(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      height: 60,
+                      child: Image.network(movie.postUrl),
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
-          Text(
-            movie.releaseDate,
-            style: TextStyle(
-                color: Color.fromRGBO(0x9a, 0x9a, 0x9a, 1), fontSize: 9),
-          )
-        ],
+                ),
+                SizedBox(width: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      movie.title,
+                      style:
+                          TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 5),
+                    RatingBar.builder(
+                        initialRating: 4,
+                        direction: Axis.horizontal,
+                        ignoreGestures: true,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemBuilder: (context, _) =>
+                            const Icon(Icons.star, color: Colors.amber),
+                        itemSize: 9,
+                        onRatingUpdate: (_) {}),
+                    Container(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: const Text(
+                        'Action, Drama',
+                        style: TextStyle(
+                            color: Color.fromRGBO(0x9a, 0x9a, 0x9a, 1),
+                            fontSize: 9),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Text(
+              movie.releaseDate,
+              style: TextStyle(
+                  color: Color.fromRGBO(0x9a, 0x9a, 0x9a, 1), fontSize: 9),
+            )
+          ],
+        ),
       ),
     );
   }
