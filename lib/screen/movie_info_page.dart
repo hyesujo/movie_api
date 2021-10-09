@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:movie_app/model/movie.dart';
 import 'package:movie_app/provider/movie_provider.dart';
+import 'package:movie_app/screen/movie_detail_page.dart';
 import 'package:provider/provider.dart';
 
 class MovieInfoPage extends StatelessWidget {
@@ -32,7 +33,7 @@ class MovieInfoPage extends StatelessWidget {
 
   Widget _buildBody(List<Movie> movieDatas, BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -43,7 +44,7 @@ class MovieInfoPage extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Container(
             height: 200,
             child: ListView.builder(
@@ -64,39 +65,47 @@ class MovieInfoPage extends StatelessWidget {
   }
 
   Widget _buildMainPost(BuildContext context, Movie movieData) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.only(right: 16),
-          height: 160,
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(movieData.postUrl)),
-        ),
-        const SizedBox(height: 7),
-        Container(
-          padding: const EdgeInsets.only(right: 16),
-          child: Text(
-            movieData.title.length > 10
-                ? movieData.title.substring(0, 11) + '...'
-                : movieData.title,
-            style: const TextStyle(fontSize: 12),
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => MovieDetailPage(
+                  movie: movieData,
+                )));
+      },
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(right: 16),
+            height: 160,
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(movieData.postUrl)),
           ),
-        ),
-        Container(
-          padding: const EdgeInsets.only(right: 16),
-          child: RatingBar.builder(
-              initialRating: 4,
-              direction: Axis.horizontal,
-              ignoreGestures: true,
-              allowHalfRating: true,
-              itemCount: 5,
-              itemBuilder: (context, _) =>
-                  const Icon(Icons.star, color: Colors.amber),
-              itemSize: 9,
-              onRatingUpdate: (_) {}),
-        ),
-      ],
+          const SizedBox(height: 7),
+          Container(
+            padding: const EdgeInsets.only(right: 16),
+            child: Text(
+              movieData.title.length > 10
+                  ? movieData.title.substring(0, 11) + '...'
+                  : movieData.title,
+              style: const TextStyle(fontSize: 12),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(right: 16),
+            child: RatingBar.builder(
+                initialRating: 4,
+                direction: Axis.horizontal,
+                ignoreGestures: true,
+                allowHalfRating: true,
+                itemCount: 5,
+                itemBuilder: (context, _) =>
+                    const Icon(Icons.star, color: Colors.amber),
+                itemSize: 9,
+                onRatingUpdate: (_) {}),
+          ),
+        ],
+      ),
     );
   }
 
